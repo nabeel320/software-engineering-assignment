@@ -1,0 +1,109 @@
+Roll no: 2k18/csee/124
+
+                                              WEIZZ: Automatic Grey-Box Fuzzing
+                                               for Structured Binary Formats
+
+
+
+     Authors: 
+
+(1)Andrea  Fioraldi 
+
+(2)Daniele Cono D'Elia
+
+(3)Emilio  Coppa
+
+
+research conference:
+
+ISSTA is the leading research conference in software testing and analysis,
+bringing together academics, modern researchers, plus practitioners to swap new ideas,
+difficulties, and experience on how to analyze and test software systems.
+The ISSTA program will include technical papers, keynotes, workshops, and a doctoral symposium.
+
+ 
+Publication:
+
+ISSTA 2020: Proceedings of the 29th ACM SIGSOFT International Symposium on Software Testing and AnalysisJuly 2020 
+
+
+INTRODUCTION
+
+Recent years have witnesses a spike of activity in the development
+of efficient techniques for fuzz testing, also known as fuzzing. In
+particular, the coverage-based grey-box fuzzing (CGF) approach
+has proven to be very effective for finding bugs often indicative of
+weaknesses from a security standpoint. The availability of the AFL
+
+
+
+
+
+Contributions.
+
+By using information that is within immediate
+reach of a fuzzer in its usual work, we propose a method to infer
+an approximate structure for a chunk-based input and then mutate
+it in a fully automatic manner. Throughout the paper we present:
+• a dependency identification technique embedded in the deterministic mutation stage of grey-box fuzzing;
+• a tag assignment mechanism that uses such dependencies to
+overcome fuzzing roadblocks and to back a structure inference scheme for chunk-based formats;
+• an implementation of the approach called Weizz.
+In our experiments Weizz beats or matches a chunk-based CGF
+proposal that requires a format specification, and outperforms several general-purpose fuzzers over the applications we considered.
+We make Weizz available as open source at:
+https://github.com/andreafioraldi/weizz-fuzzer
+
+
+
+
+METHODOLOGY
+
+The fuzzing logic of Weizz comprises two stages, depicted in Figure 1.
+Both stages pick from a shared queue made of inputs processed by previous iterations of either stage.
+The surgical stage identifies dependencies between an input and the comparisons
+made in the program: it summarizes them by placing tags on input
+bytes, and applies deterministic mutations to the sole bytes that
+turn out to influence operands of comparison instructions. The
+structure-aware stage extends the nondeterministic working of
+AFL, leveraging previously assigned tags to infer the location of
+fields and chunks in an input and mutate them. In the next sections
+we will detail the inner workings of the two stages.
+
+
+
+
+
+
+
+
+Result
+
+Weizz introduces novel ideas for computing byte dependency information to simultaneously overcome roadblocks and back fully
+automatic fuzzing of chunk-based binary formats. The experimental results seem promising: we are competitive with human-assisted
+proposals, and we found new bugs in well-tested software.
+Our approach has two practical advantages: fuzzers already attempt bitflips in deterministic stages,
+and instrumenting comparisons is becoming a common practice for roadblocks. We empower
+such analyses to better characterize the program behavior while
+fuzzing, enabling the tag assignment mechanism. Prior proposals
+do not offer sufficient information to this end: even for RedQueen,
+its colorization [5] identifies I2S portions of an input (crucial for
+roadblocks) but cannot reveal dependencies for non-I2S bytes.
+A downside is that bit flipping can get costly over large inputs.
+However, equally important is the time the program takes to execute
+one test case. In our experiments Weizz applied the surgical stage
+to inputs up to 3K bytes, with comparable or better coverage than
+the other fuzzers we considered. We leave to future work using
+forms of bit-level DTA [32, 33] as an alternative for “costly” inputs.
+Weizz may miss dependencies for comparisons made with uninstrumented instructions. This can happen in optimized code that
+uses arithmetic and logical operations to set CPU flags for a branch
+decision. We may resort to intra-procedural static analysis to spot
+them [25] (as logging all of them blindly can be expensive) but
+currently opted for tolerating some inconsistencies in the heuristics
+we use, for instance skipping over one byte in FindChunkEnd
+when the remaining bytes would match the expected patterns.
+Our structure-aware stage, in addition to not requiring a specification,
+ is different than AFLSmart also in where we apply highorder operators. AFLSmart mutates chunks in a black-box fashion,
+that is, it has no evidence whether the program manipulated the
+involved input portion during the execution. Weizz chooses among
+4AFLSmart shown as reference—queues are uncomparable (no context sensitivity)

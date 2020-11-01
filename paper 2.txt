@@ -1,0 +1,95 @@
+Roll no: 2k18/csee/124
+
+                                                  Running Symbolic Execution Forever
+
+
+
+  
+    Authors: 
+(1)Frank  Busse
+ 
+(2)Martin  Nowack
+ 
+(3)Cristian Cadar
+ 
+
+Publication:
+ISSTA 2020: Proceedings of the 29th ACM SIGSOFT International Symposium on Software Testing and AnalysisJuly 2020 
+
+
+INTRODUCTION:
+For testing real-world software systems, symbolic execution is often
+proposed as a method for thoroughly enumerating and testing
+every potential path through an application. While achieving full
+enumeration is usually impossible due to the fundamental challenge
+of the state-space explosion problem, even a subset of paths can be
+used to find bugs or generate a high-coverage test suite [4, 7, 14].
+And typically, the more paths are explored, the better the outcome.
+With the multitude of paths, performing symbolic execution
+on a modern machine quickly consumes all available memory. 
+
+
+
+
+
+
+CONCLUSION:
+
+In this paper, we have presented an approach which enables symbolic execution to run indefinitely on large applications while continuing to explore new paths. Our approach is based on memoization, enhanced with support for divergence detection, switching
+search heuristics between record and replay time, and efficient
+storage which preserves the structure of the execution tree. We
+implemented our approach in MoKlee, an extension of the popular
+symbolic execution engine KLEE, and performed an extensive evaluation on 93 Linux applications. Our evaluation shows practical
+space and runtime overheads, high re-execution speed, effective
+divergence detection and applicability to iterative deepening and
+long-running symbolic execution analysis.
+
+
+
+
+
+
+
+
+Methodology:
+
+A natural use case for memoization is iterative deepening, which is
+able to mimic BFS exploration with much lower memory consumption by repeatedly exploring a program with DFS up to a certain
+(increasing) depth in the execution tree.
+For this experiment, we select and run the set of non-Coreutils
+applications with BFS exploration until KLEE’s default memory
+limit of 2 GB is exceeded. At this point, we cannot run in BFS mode
+anymore without losing paths. Instead, we employ iterative deepening, making use of the memory-friendly DFS in each iteration.
+Two of the benchmarks, diff and readelf , had very long runtimes
+and we decided to reduce the solver timeout in both cases to 1 s.
+Also, we excluded find from the selected benchmarks because of
+its large number of divergences (see Table 1).
+As starting depth values for iterative deepening, we choose
+the minimum tree depths for which states are terminated due to
+memory pressure (𝑑 = 22 for diff , 13 for grep, 42 for libspng, 22 for
+readelf and 19 for tcpdump). We iteratively increase the depths by
+five more levels (to 𝑑 +5), once without and once with memoization
+(including path pruning)
+
+
+
+
+
+
+
+
+
+Result:
+
+Finally, we report the distribution of pruned states for all reexecutions in Figure 11. The more states can be pruned, the fewer instructions have to be re-executed. Obviously, the set of pruned states
+in a complete re-execution is independent of the search strategy used
+during re-execution. The difference between RndCov/RndCov and
+RndCov/DFS is merely caused by the different sets of non-diverging
+applications. The outlier in the experiments with a recorded DFS
+execution is yes. By executing an endless loop, yes creates a very
+deep path that never terminates and hence can’t be pruned.
+Non-Coreutils applications. For these applications, we memoize 2 h runs only with RndCov and use both exploration strategies
+on re-execution. Table 1 shows for each run the number of recorded
+instructions, the time needed by the re-execution, the number of
+instructions successfully replayed and the number of diverging
+states.

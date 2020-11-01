@@ -1,0 +1,102 @@
+Roll no: 2k18/csee/124
+
+                                           Can Automated Program Repair Refine Fault Localization?
+                                                        A Unified Debugging Approach
+
+
+   Authors: 
+(1)Yiling  Lou
+(2)Ali  Ghanbari
+(3)Xia  Li
+(4)Lingming  Zhang
+(5)Haotian  Zhang
+(6)Dan  Hao
+(7)Lu  Zhang
+
+
+Publication:
+ISSTA 2020: Proceedings of the 29th ACM SIGSOFT International Symposium on Software Testing and AnalysisJuly 2020
+
+
+INTRODUCTION:
+
+Software bugs (also called software faults, errors, defects, #aws,
+or failures [74]) are prevalent in modern software systems, and
+have been widely recognized as notoriously costly and disastrous.
+For example, in 2017, Tricentis.com investigated software failures
+impacting 3.7 Billion users and $1.7 Trillion assets, and reported that
+this is just scratching the surface – there can be far more software
+bugs in the world than we will likely ever know about [70]. In practice,
+software debugging is widely adopted for removing software bugs.
+However, manual debugging can be extremely tedious, challenging,
+and time-consuming due to the increasing complexity of modern
+software systems [68]. Therefore, a large body of research e"orts
+have been dedicated to automated debugging [8, 34, 52, 59, 68].
+There are two key questions in software debugging: (1) how to
+automatically localize software bugs to facilitate manual repair? (2)
+how to automatically repair software bugs without human intervention? To address them, researchers have proposed two categories
+of techniques, fault localization [5, 14, 30, 42, 51, 80, 81] and program repair [32, 36, 38, 44, 45, 60, 61, 72]
+
+
+
+METHODOLOGY:
+
+We conduct our study on all bugs from the Defects4J benchmark [31],
+which has been widely used in prior fault-localization work [39,
+40, 57, 67, 82]. Defects4J is a collection of reproducible real bugs
+with a supporting infrastructure. To our knowledge, all the fault
+localization studies evaluated on Defects4J use the original version
+Defects4J (V1.2.0). Recently, an extended version, Defects4J (V1.4.0
+
+
+
+
+CONCLUSION:
+
+We have investigated a simple question: can automated program
+repair help with fault localization? To this end, we have designed,
+ProFL, the !rst uni!ed debugging approach that leverages program
+repair information as the feedback for powerful fault localization.
+The experimental results on the widely used Defects4J benchmarks
+demonstrate that ProFL can signi!cantly outperform state-of-theart spectrum and mutation based fault localization. Furthermore, we
+have demonstrated ProFL’s e"ectiveness under various settings as
+well as with an industry case study. Lastly, ProFL even boosts stateof-the-art fault localization via both unsupervised and supervised
+learning.
+
+
+
+RESULTS:
+
+To answer this RQ, we !rst present the overall fault localization
+results of ProFL and state-of-the-art SBFL and MBFL techniques
+on Defects4J (V1.2.0) in Table 5. Column “Tech Name” represents
+the corresponding techniques and the other columns present the
+results in terms of Top-1, Top-3, Top-5, MFR and MAR. From the
+table, we observe that ProFL signi!cantly outperforms all the existing techniques in terms of all the !ve metrics. For example, the
+Top-1 value of ProFL is 161, 30 more than MCBFL, 44 more than
+aggregation-based SBFL, 77 more than Metallaxis, and 72 more
+than MUSE. In addition, MAR and MFR values are also signi!-
+cantly improved (e.g., 47.30% improvement in MFR compared with
+state-of-the-art MCBFL), indicating a consistent improvement for
+all buggy elements in the ranked lists. Note that our overall bug
+ranking results are consistent with prior fault localization work at
+the method level [40], e.g., state-of-the-art MBFL can outperform
+SBFL, demonstrating the e"ectiveness of MBFL. Meanwhile, we
+observe that SBFL outperforms state-of-the-art MBFL techniques
+in terms of Top-ranked bugs, which is not consistent with prior
+work [40]. We !nd the main reason to be that the prior work did
+not use suspicious aggregation (which was proposed in parallel
+with the prior work) for SBFL, demonstrating the e"ectiveness of
+suspiciousness aggregation for SBFL.
+To further investigate why the simple ProFL approach works,
+we further analyze each of the four basic ProFL patch categories in
+a post-hoc way. For each patch category group Gi , for each bug in
+the benchmark, we use metric Ratiob to represent the ratio of the
+number of buggy elements (i.e., methods in this work) categorized
+into group Gi to the number of all elements categorized into group.
+
+
+
+
+
+
